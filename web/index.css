@@ -1,0 +1,105 @@
+#PodcastsList{
+    float: left;
+    width: 33.33%;
+    padding: 15px;
+    margin-left:10%;
+    margin-top:0.5%;
+}
+#Episodes{
+    float: left;
+    width: 33.33%;
+    padding: 15px;
+    margin-left:10%;
+    margin-top:1.5%;
+}
+#AllTranscribes{
+    float: left;
+    width: 42.33%;
+    padding: 15px;
+    margin-left:10%;
+    margin-top:1.5%;
+    position: absolute;
+}
+#podcastUL
+{
+    float: left;
+    padding: 15px;
+    margin-left:10%;
+    margin-top:1.5%;
+    width: 92%;
+}
+.STT{
+    margin-left: 10px;
+}
+.stt-logo{
+    position: relative;
+    left: 40%;
+    max-width:20%;
+}
+.Search {
+    position:relative;
+    left: 25%;
+    width: 50%;
+}
+.list{
+    width: 1000px;
+}
+* {
+    box-sizing:border-box;
+}
+.lds-hourglass {
+    display: inline-block;
+    position: relative;
+    width: 64px;
+    height: 64px;
+}
+.loader {
+    position: absolute;
+    border: 16px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 16px solid blue;
+    border-right: 16px solid green;
+    border-bottom: 16px solid red;
+    width: 60px;
+    height: 60px;
+    -webkit-animation: spin 2s linear infinite;
+    animation: spin 2s linear infinite;
+    left:48%;
+    top:50%;
+}
+
+@-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.highlighted{
+    background-color: #ff2;
+}
+nav{
+    float: left;
+    padding: 15px;
+    margin-left:10%;
+    margin-top:1.5%;
+    position: absolute;
+    top: 32%;
+    left: 11%;
+}
+#Podcast:hover {
+    cursor: pointer;
+    background-color: #007bff;
+    border-bottom-color: black;
+    border-bottom-width: 2px;
+    transition-duration: 1s;
+}
+#pages2{
+    float: left;
+    position: absolute;
+    left: 15%;
+    top: 40%
+}

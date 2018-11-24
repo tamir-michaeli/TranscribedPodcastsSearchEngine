@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speech To Text</title>
+    <script src="jquery-3.3.1.min.js"></script>
+    <script src="index.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.es6.min.js"></script>
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="index.css">
+    <link rel = "stt" href="resources/icons8-communicate-64.png">
+</head>
+<body>
+
+<div class="login-page-wrapper">
+    <div class="jumbotron mx-auto" >
+        <img class="stt-logo " src="resources/stt.jpg" />
+    </div>
+    <div class="Search">
+        <input class="form-control form-control-lg" placeholder="Search Podcast..." id="SearchBox" required/>
+        <div class="container pt-1 pl-5 text-center">
+            <select id="ResultCount" onchange="filterResults()">
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+                <option value="20">20</option>
+            </select>
+            <button name="SubmitSearch" class="btn btn-primary" type="submit" value="Podcast Search" onclick="handleSubmitSearch()">Podcast Search</button>
+            <button name="SubmitTextSearch" class="btn btn-secondary" type="submit" value="Text Search" onclick="handleSubmitTextSearch()">Podcast Text Search</button>
+            <button name="SubmitAllTranscripts" class="btn btn-secondary" type="submit" value="Show All Transcripts" onclick="handleSubmitAllTranscripts()">Show All Transcripts</button>
+        </div>
+    </div>
+    <div>
+        <div id = "PodcastsList"></div>
+        <div id = "Episodes"></div>
+        <div id ="AllTranscribes"></div>
+        <div id="pages2">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center" id="pages">
+                </ul>
+            </nav>
+        </div>
+        <div class="loader" id ="loader" style="display: none;"></div>
+    </div>
+</div>
+</body>
+</html>

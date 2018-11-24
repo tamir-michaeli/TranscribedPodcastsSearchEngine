@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+         version="3.1">
+    
+    <servlet>
+        <servlet-name>ItunesSearch</servlet-name>
+        <servlet-class>Server.Servlets.ItunesSearch</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>PodcastEpisodes</servlet-name>
+        <servlet-class>Server.Servlets.PodcastEpisodes</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AudioToTextServlet</servlet-name>
+        <servlet-class>Server.Servlets.AudioToTextServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>LuceneSearch</servlet-name>
+        <servlet-class>Server.Servlets.LuceneSearchServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ShowAllTranscripts</servlet-name>
+        <servlet-class>Server.Servlets.ShowAllTranscripts</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ShowAllTranscripts</servlet-name>
+        <url-pattern>/ShowAllTranscripts</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LuceneSearch</servlet-name>
+        <url-pattern>/luceneSearch</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AudioToTextServlet</servlet-name>
+        <url-pattern>/AudioToTextServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ItunesSearch</servlet-name>
+        <url-pattern>/itunesSearch</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PodcastEpisodes</servlet-name>
+        <url-pattern>/PodcastEpisodes</url-pattern>
+    </servlet-mapping>
+</web-app>
