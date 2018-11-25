@@ -1,12 +1,13 @@
 var ChoosenPodacast; //hold the Chosen podcast
 var ChoosenEpisode;//hold the Chosen podcast episode
 var AllTrascribes;
+
 /**
  * this function is an ajax GET call to Server to search for podcast
  * **/
 function handleSubmitSearch() {
     var loader = document.getElementById("loader");
-    if(document.getElementById("SearchBox").value != "") {
+    if (document.getElementById("SearchBox").value != "") {
         loader.style.display = "";
         var reqData = {"data": document.getElementById("SearchBox").value};//get input from user
         $.ajax({
@@ -25,8 +26,7 @@ function handleSubmitSearch() {
             }
         });
     }
-    else
-    {
+    else {
         alert("You tried to fool me? joke on you!! Plaese enter a real podcast name");
     }
 }
@@ -36,7 +36,7 @@ function handleSubmitSearch() {
  * **/
 function handleSubmitTextSearch() {
     var loader = document.getElementById("loader");
-    if(document.getElementById("SearchBox").value != "") {
+    if (document.getElementById("SearchBox").value != "") {
         loader.style.display = "";
         var reqData = {"data": document.getElementById("SearchBox").value}; //get input from user
         $.ajax({
@@ -55,8 +55,7 @@ function handleSubmitTextSearch() {
             }
         });
     }
-    else
-    {
+    else {
         alert("You tried to fool me? joke on you!! Plaese enter a real podcast name");
     }
 }
@@ -65,23 +64,22 @@ function handleSubmitTextSearch() {
  * this function is an ajax GET call to Server to show all Transcripts
  * **/
 function handleSubmitAllTranscripts() {
-        var loader = document.getElementById("loader");
-        document.getElementById("SearchBox").value = "";
-        loader.style.display = "";
-        $.ajax({
-            type: "GET",
-            contentType: 'application/json',
-            //contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-            url: "/PodcastsSpeechToText/ShowAllTranscripts",
-            success: function (response) {
-                loader.style.display = "none";
-                AllTrascribes = response;
-                AllTranscribeHandle(response);
-            },
-            error: function (response) {
-                loader.style.display = "none";
-                window.alert("Something Went Wrong : " + response.status + " " + response.statusText);
-            }
+    var loader = document.getElementById("loader");
+    document.getElementById("SearchBox").value = "";
+    loader.style.display = "";
+    $.ajax({
+        type: "GET",
+        contentType: 'application/json',
+        url: "/PodcastsSpeechToText/ShowAllTranscripts",
+        success: function (response) {
+            loader.style.display = "none";
+            AllTrascribes = response;
+            AllTranscribeHandle(response);
+        },
+        error: function (response) {
+            loader.style.display = "none";
+            window.alert("Something Went Wrong : " + response.status + " " + response.statusText);
+        }
     });
 }
 
@@ -107,7 +105,7 @@ function HandleTextIT(Mp3Url, Episode) {
             "EpisodeName": Episode,
             "PodcastInfo": ChoosenPodacast,
             "EpisodeInfo": ChoosenEpisode,
-            "Lang":lang
+            "Lang": lang
         };
         $.ajax({
             type: "GET",
@@ -117,10 +115,10 @@ function HandleTextIT(Mp3Url, Episode) {
             success: function (response) {
                 loader.style.display = "none";
                 if (response) {
-                    window.alert("there is already a transcript to this podcast...");
+                    window.alert("This Podcast is allready transcribed");
                 }
                 else {
-                    window.alert("Yay we Transcript the podcast successfully!!");
+                    window.alert("Podcast transcribed successfully");
                 }
             },
             error: function (response) {
@@ -175,7 +173,7 @@ function AllTranscribeHandle(response) {
     var ul = document.createElement('ul');
     ul.setAttribute("id", "podcastUL");
     if (response.length == 0) {
-        window.alert("Our finest monkeys tried to searched for what you asked, and didn't find anything in our data... Try something else");
+        window.alert("No results found.");
     }
     else {
         for (var i = 0; i < response.length; ++i) {
@@ -218,7 +216,9 @@ function AllTranscribeHandle(response) {
 
             HideTranscribeIcon.className = "glyphicon glyphicon-eye-close";
             HideTranscribe.setAttribute("class", " btn btn-primary  ml-2");
-            HideTranscribe.onclick = function (ev) { RemoveElemetnsFromContainers("Episodes"); };
+            HideTranscribe.onclick = function (ev) {
+                RemoveElemetnsFromContainers("Episodes");
+            };
             HideTranscribe.appendChild(HideTranscribeIcon);
 
             PodcastName.innerHTML = response[i].PodcastName;   // Use innerHTML to set the text
@@ -259,7 +259,7 @@ function luceneSearchResponse(response) {
     var ResultCount = document.getElementById("ResultCount").value;
     ul.setAttribute("id", "podcastUL");
     if (response.length == 0) {
-        window.alert("Our finest monkeys tried to searched for what you asked, and didn't find anything in our data... Try something else");
+        window.alert("No results found.");
     }
     else {
         for (var i = 0; i < response.length; ++i) {
@@ -277,7 +277,10 @@ function luceneSearchResponse(response) {
             var HideTranscribeIcon = document.createElement('span');
             var HideTranscribe = document.createElement('a'); //Play button
             var TranscribeText = response[i].Text;
-
+            var audioBar = document.createElement('audio');
+            audioBar.src = response[i].PodcastURL;
+            audioBar.controls = 'controls';
+            audioBar.preload = "auto";
             h4.innerHTML = response[i].Artist;   // Use innerHTML to set the text
             HitScore.innerText = "Match Score : " + response[i].NumSearchHits;
             img.setAttribute("src", response[i].ArtworkURL);
@@ -302,7 +305,9 @@ function luceneSearchResponse(response) {
 
             HideTranscribeIcon.className = "glyphicon glyphicon-eye-close";
             HideTranscribe.setAttribute("class", " btn btn-primary  ml-2");
-            HideTranscribe.onclick = function (ev) { RemoveElemetnsFromContainers("Episodes"); };
+            HideTranscribe.onclick = function (ev) {
+                RemoveElemetnsFromContainers("Episodes");
+            };
             HideTranscribe.appendChild(HideTranscribeIcon);
 
             PodcastName.innerHTML = response[i].PodcastName;   // Use innerHTML to set the text
@@ -316,7 +321,8 @@ function luceneSearchResponse(response) {
             divM.appendChild(PodcastName);
             divM.appendChild(EpisodeName);
             divM.appendChild(HitScore);
-            divM.appendChild(Play);
+            divM.appendChild(audioBar);
+            //divM.appendChild(Play);
             divM.appendChild(Transcribe);
             divM.appendChild(HideTranscribe);
             div.appendChild(divM);
@@ -348,10 +354,8 @@ function HandleResponse(response) {
     var ResultCount = document.getElementById("ResultCount").value;
     var ul = document.createElement('ul');
     ul.setAttribute("id", "podcastUL");
-    // if (response.resultCount < ResultCount)
-    //     ResultCount = response.resultCount;
     if (response.resultCount == 0) {
-        window.alert("We searched all over the web and got.... NOTHING... Sorry try again");
+        window.alert("No results found.");
     }
     else {
         for (var i = 0; i < response.resultCount; ++i) {
@@ -375,7 +379,7 @@ function HandleResponse(response) {
             })(feedURL, i));
             div.appendChild(img);
             div.appendChild(h4);
-            div.setAttribute("id","Podcast");
+            div.setAttribute("id", "Podcast");
             if (i < ResultCount) {
                 div.style.display = "";
             }
@@ -402,10 +406,9 @@ function HandleResponseRss(response) {
     var ResultCount = document.getElementById("ResultCount").value;
     var ul = document.createElement('ul');
     ul.setAttribute("id", "episodesUL");
-    // if (response.results.length < ResultCount)
-    //     ResultCount = response.results.length;
+
     if (response.results.length == 0) {
-        window.alert("We searched all over the web and got.... NOTHING... Sorry try again");
+        window.alert("No results found.");
     }
     else {
         for (var i = 0; i < response.results.length; ++i) {
@@ -420,13 +423,15 @@ function HandleResponseRss(response) {
             var divM = document.createElement('div');
             var Play = document.createElement('a'); //Play button
             var PlayIcon = document.createElement('span');
-
+            var audioBar = document.createElement('AUDIO');
+            audioBar.src = Mp3Url;
+            audioBar.controls = 'controls';
+            audioBar.preload = "auto";
             PlayIcon.className = "glyphicon glyphicon-play";
             Play.setAttribute("class", " btn btn-primary  ml-2");
             Play.setAttribute("href", response.results[i].PodCastURL);
             Play.setAttribute("target", "_blank");
             Play.appendChild(PlayIcon);
-
             STT.setAttribute("class", "btn btn-primary");
             STTIcon.className = "glyphicon glyphicon-list-alt";
             STT.appendChild(STTIcon);
@@ -451,8 +456,10 @@ function HandleResponseRss(response) {
             divM.appendChild(mp3Link);
             divM.appendChild(STT);
             divM.appendChild(length);
-            divM.appendChild(Play);
+            //divM.appendChild(Play);
+            divM.appendChild(audioBar);
             div.appendChild(divM);
+
             if (i < ResultCount) {
                 div.style.display = "";
             }
@@ -498,8 +505,7 @@ function filterResults() {
             }
         }
     }
-    if (liTranscribs != null)
-    {
+    if (liTranscribs != null) {
         createPages();
     }
 }
@@ -514,7 +520,7 @@ function ShowTranscribe(Transcribe) {
     var div = document.createElement('div');
     var p = document.createElement('p');
 
-    p.setAttribute("id","transcribe");
+    p.setAttribute("id", "transcribe");
     div.setAttribute("class", "media border p-3 m-4");
     p.innerText = Transcribe;
     div.appendChild(p);
@@ -531,8 +537,7 @@ function RemoveElemetnsFromContainers(ContainerName) {
     while (Elem != null && Elem.firstChild) {
         Elem.removeChild(Elem.firstChild);
     }
-    if(Elem != null && ContainerName == "podcastUL")
-    {
+    if (Elem != null && ContainerName == "podcastUL") {
         Elem.parentNode.removeChild(Elem);
     }
 }
@@ -542,19 +547,17 @@ function RemoveElemetnsFromContainers(ContainerName) {
  * this function is for creating paging to all transcribe.
  *
  * */
-function createPages()
-{
+function createPages() {
     RemoveElemetnsFromContainers("pages");
     var divider = document.getElementById("ResultCount").value;
     var pagesNav = document.getElementById("pages");
     var pages = AllTrascribes.length / divider;
-    for (var i=0;i<pages;i++)
-    {
+    for (var i = 1; i <= pages; i++) {
         var li = document.createElement('li');
         var a = document.createElement('a');
-        li.setAttribute("class","page-item");
-        a.setAttribute("class","page-link");
-        a.innerHTML= i;
+        li.setAttribute("class", "page-item");
+        a.setAttribute("class", "page-link");
+        a.innerHTML = i;
         a.addEventListener('click', (function (i) {
             return function () {
                 ChangeShowTranscribes(i);
@@ -569,20 +572,16 @@ function createPages()
 /**
  * this function is to control the flow of showen transcribes
  * */
-function ChangeShowTranscribes(index)
-{
+function ChangeShowTranscribes(index) {
     RemoveElemetnsFromContainers("Episodes");
     var divider = document.getElementById("ResultCount").value;
     var transcribs = document.getElementById("AllTranscribes");
     var list = transcribs.getElementsByClassName("media border p-2");
-    for(i=0;i<list.length;i++)
-    {
-        if(i >= index * divider && i<((index * divider) + +divider))
-        {
+    for (i = 0; i < list.length; i++) {
+        if (i >= index * divider && i < ((index * divider) + +divider)) {
             list[i].style.display = "";
         }
-        else
-        {
+        else {
             list[i].style.display = "none";
         }
     }
@@ -597,4 +596,10 @@ function checkForHebrewCharacters(value) {
     var patt = new RegExp("[\\u0590-\\u05FF]*");
     return patt.test(value);
 }
+
+$(document).ready(function () {
+    audiojs.events.ready(function () {
+        var as = audiojs.createAll();
+    });
+});
 
