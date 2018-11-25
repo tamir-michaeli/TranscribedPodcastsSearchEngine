@@ -1,11 +1,13 @@
 var ChoosenPodacast; //hold the Chosen podcast
 var ChoosenEpisode;//hold the Chosen podcast episode
 var AllTrascribes;
+var lastPressedButton = document.getElementById("SubmitSearch");
 
 /**
  * this function is an ajax GET call to Server to search for podcast
  * **/
 function handleSubmitSearch() {
+    lastPressedButton = document.getElementById("SubmitSearch");
     var loader = document.getElementById("loader");
     if (document.getElementById("SearchBox").value != "") {
         loader.style.display = "";
@@ -13,7 +15,6 @@ function handleSubmitSearch() {
         $.ajax({
             type: "GET",
             contentType: 'application/json',
-            //contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
             url: "/PodcastsSpeechToText/itunesSearch",
             data: reqData,
             success: function (response) {
@@ -35,6 +36,7 @@ function handleSubmitSearch() {
  * this function is an ajax GET call to Server to search for podcast in the pool of Transcription podcasts
  * **/
 function handleSubmitTextSearch() {
+    lastPressedButton = document.getElementById("SubmitTextSearch");
     var loader = document.getElementById("loader");
     if (document.getElementById("SearchBox").value != "") {
         loader.style.display = "";
@@ -42,7 +44,6 @@ function handleSubmitTextSearch() {
         $.ajax({
             type: "GET",
             contentType: 'application/json',
-            //contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
             url: "/PodcastsSpeechToText/luceneSearch",
             data: reqData,
             success: function (response) {
@@ -64,6 +65,7 @@ function handleSubmitTextSearch() {
  * this function is an ajax GET call to Server to show all Transcripts
  * **/
 function handleSubmitAllTranscripts() {
+    lastPressedButton = document.getElementById("SubmitAllTranscripts");
     var loader = document.getElementById("loader");
     document.getElementById("SearchBox").value = "";
     loader.style.display = "";
@@ -181,29 +183,25 @@ function AllTranscribeHandle(response) {
             var img = document.createElement('img');
             var div = document.createElement('div');
             var divM = document.createElement('div');
-            var Play = document.createElement('a'); //Play button
-            var PlayIcon = document.createElement('span');
             var PodcastName = document.createElement('h5');//Podcast Name
             var EpisodeName = document.createElement('h5');//Episode Name
             var TranscribeIcon = document.createElement('span');
-            var Transcribe = document.createElement('a'); //Play button
+            var Transcribe = document.createElement('a');
             var HitScore = document.createElement('h5');
             var HideTranscribeIcon = document.createElement('span');
-            var HideTranscribe = document.createElement('a'); //Play button
+            var HideTranscribe = document.createElement('a');
             var TranscribeText = response[i].Text;
+            var audioBar = document.createElement("audio");
+            audioBar.src = response[i].PodcastURL;
+            audioBar.controls = true;
+            audioBar.preload = "auto";
 
-            h4.innerHTML = response[i].Artist;   // Use innerHTML to set the text
+            h4.innerHTML = response[i].Artist;
             HitScore.innerText = "Match Score : " + response[i].NumSearchHits;
             img.setAttribute("src", response[i].ArtworkURL);
             img.setAttribute("class", "align-self-center mr-3");
             img.setAttribute("width", "50");
             img.setAttribute("height", "50");
-
-            PlayIcon.className = "glyphicon glyphicon-play";
-            Play.setAttribute("class", " btn btn-primary  ml-2");
-            Play.setAttribute("href", response[i].PodcastURL);
-            Play.setAttribute("target", "_blank");
-            Play.appendChild(PlayIcon);
 
             TranscribeIcon.className = "glyphicon glyphicon-eye-open";
             Transcribe.setAttribute("class", " btn btn-primary  ml-2");
@@ -221,18 +219,17 @@ function AllTranscribeHandle(response) {
             };
             HideTranscribe.appendChild(HideTranscribeIcon);
 
-            PodcastName.innerHTML = response[i].PodcastName;   // Use innerHTML to set the text
+            PodcastName.innerHTML = response[i].PodcastName;
             EpisodeName.innerHTML = response[i].EpisodeName;
 
             divM.setAttribute("class", "media-body");
             div.setAttribute("class", "media border p-2");
-
             div.appendChild(img);
             divM.appendChild(h4);
             divM.appendChild(PodcastName);
             divM.appendChild(EpisodeName);
             divM.appendChild(HitScore);
-            divM.appendChild(Play);
+            divM.appendChild(audioBar);
             divM.appendChild(Transcribe);
             divM.appendChild(HideTranscribe);
             div.appendChild(divM);
@@ -267,8 +264,6 @@ function luceneSearchResponse(response) {
             var img = document.createElement('img');
             var div = document.createElement('div');
             var divM = document.createElement('div');
-            var Play = document.createElement('a'); //Play button
-            var PlayIcon = document.createElement('span');
             var PodcastName = document.createElement('h5');//Podcast Name
             var EpisodeName = document.createElement('h5');//Episode Name
             var TranscribeIcon = document.createElement('span');
@@ -279,7 +274,7 @@ function luceneSearchResponse(response) {
             var TranscribeText = response[i].Text;
             var audioBar = document.createElement('audio');
             audioBar.src = response[i].PodcastURL;
-            audioBar.controls = 'controls';
+            audioBar.controls = true;
             audioBar.preload = "auto";
             h4.innerHTML = response[i].Artist;   // Use innerHTML to set the text
             HitScore.innerText = "Match Score : " + response[i].NumSearchHits;
@@ -287,12 +282,6 @@ function luceneSearchResponse(response) {
             img.setAttribute("class", "align-self-center mr-3");
             img.setAttribute("width", "50");
             img.setAttribute("height", "50");
-
-            PlayIcon.className = "glyphicon glyphicon-play";
-            Play.setAttribute("class", " btn btn-primary  ml-2");
-            Play.setAttribute("href", response[i].PodcastURL);
-            Play.setAttribute("target", "_blank");
-            Play.appendChild(PlayIcon);
 
             TranscribeIcon.className = "glyphicon glyphicon-eye-open";
             Transcribe.setAttribute("class", " btn btn-primary  ml-2");
@@ -322,7 +311,6 @@ function luceneSearchResponse(response) {
             divM.appendChild(EpisodeName);
             divM.appendChild(HitScore);
             divM.appendChild(audioBar);
-            //divM.appendChild(Play);
             divM.appendChild(Transcribe);
             divM.appendChild(HideTranscribe);
             div.appendChild(divM);
@@ -337,7 +325,6 @@ function luceneSearchResponse(response) {
         listDiv.appendChild(ul);
     }
 }
-
 
 /**
  * function to handle the response from Server.
@@ -421,17 +408,12 @@ function HandleResponseRss(response) {
             var length = document.createElement('button'); //length fo podcast
             var div = document.createElement('div'); //div to hold all of them
             var divM = document.createElement('div');
-            var Play = document.createElement('a'); //Play button
-            var PlayIcon = document.createElement('span');
+            //var Play = document.createElement('a'); //Play button
+            //var PlayIcon = document.createElement('span');
             var audioBar = document.createElement('AUDIO');
             audioBar.src = Mp3Url;
             audioBar.controls = 'controls';
             audioBar.preload = "auto";
-            PlayIcon.className = "glyphicon glyphicon-play";
-            Play.setAttribute("class", " btn btn-primary  ml-2");
-            Play.setAttribute("href", response.results[i].PodCastURL);
-            Play.setAttribute("target", "_blank");
-            Play.appendChild(PlayIcon);
             STT.setAttribute("class", "btn btn-primary");
             STTIcon.className = "glyphicon glyphicon-list-alt";
             STT.appendChild(STTIcon);
@@ -601,5 +583,15 @@ $(document).ready(function () {
     audiojs.events.ready(function () {
         var as = audiojs.createAll();
     });
+
 });
+
+function setEnterKeyEvent(){
+    var input = document.getElementById("SearchBox");
+    input.addEventListener("keyup", function(event) {
+        if (event.keyCode === 13) {
+            lastPressedButton.onclick();
+        }
+    });
+}
 
