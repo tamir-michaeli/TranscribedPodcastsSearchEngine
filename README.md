@@ -2,6 +2,4 @@ Compact podcast search engine. Utilizing Google's SpeechToText API to enable Tra
 the content of the podcast using Lucene API.
 Deployed with Jetty servlet container.
 
-Created By: Tamir Michaeli, Bari Halag, Elad Tanaami
-
 
